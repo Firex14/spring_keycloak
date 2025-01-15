@@ -4,7 +4,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,7 +11,6 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Getter
-
 @MappedSuperclass // Permet à cette classe d'être héritée par d'autres entités JPA
 public abstract class BaseModel {
 

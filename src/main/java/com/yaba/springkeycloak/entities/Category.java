@@ -1,7 +1,14 @@
 package com.yaba.springkeycloak.entities;
 
+import com.yaba.springkeycloak.validation.groups.Create;
+import com.yaba.springkeycloak.validation.groups.Update;
+import com.yaba.springkeycloak.validation.messages.ExceptionMessages;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Getter
@@ -9,16 +16,18 @@ import lombok.*;
 @Entity
 public class Category extends BaseModel{
 
-    private String title;
-    private String author;
-    private int stock;
+    @Column(nullable = false)
+    @NotNull(message = ExceptionMessages.REQUIRED_FIELD, groups = { Create.class, Update.class })
+    private String name;
 
-    public Category(){}
+    @Size(max = 500, message = ExceptionMessages.MAX_DESCRIPTION_SIZE, groups = { Create.class, Update.class})
+    private String description;
 
-    public Category(String title,String author, int stock) {
+    public Category() {}
+
+    public Category(String name, String description){
         super();
-        this.title = title;
-        this.author = author;
-       this.stock = stock;
+        this.name = name;
+        this.description = description;
     }
 }
