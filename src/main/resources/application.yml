@@ -2,23 +2,26 @@ spring:
   application:
     name: Spring-keycloak
     version: 1.0.0
+
   datasource:
-    url: jdbc:postgresql://localhost:5435/app_db
-    username: admin
-    password: admin@123
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     hikari:
       maximum-pool-size: 10
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
+
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update  # Mettez à jour la base de données à chaque démarrage (vous pouvez le changer à 'none' ou 'create' selon votre besoin)
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
 
+
 server:
-  port: 8001
+  port: ${APP_PORT}  # Port exposé pour l'application Spring Boot
 

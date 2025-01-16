@@ -22,10 +22,10 @@ public class ResponseUtils {
      * @param <T>     Type des données retournées.
      * @return Une instance de ResponseEntity contenant ApiResponse.
      */
-    public static <T> ResponseEntity<ApiResponse<T>> buildSuccessResponse(
+    public static <T> ResponseEntity<CustomApiResponse<T>> buildSuccessResponse(
             T data, String message, HttpStatus status) {
-        ApiResponse<T> apiResponse = new ApiResponse<>(true, data, message, status.value());
-        return ResponseEntity.status(status).body(apiResponse);
+        CustomApiResponse<T> customApiResponse = new CustomApiResponse<>(true, data, message, status.value());
+        return ResponseEntity.status(status).body(customApiResponse);
     }
 
     /**
@@ -37,15 +37,15 @@ public class ResponseUtils {
      * @param <T>          Type générique (peut être ignoré car la réponse est vide).
      * @return Une instance de ResponseEntity contenant ApiResponse.
      */
-    public static <T> ResponseEntity<ApiResponse<T>> buildErrorResponse(
+    public static <T> ResponseEntity<CustomApiResponse<T>> buildErrorResponse(
             String errorMessage, Map<String, String> errors, HttpStatus status) {
         if (errors == null) {
             errors = new HashMap<>();
         }
 
-        ApiResponse<T> apiResponse = new ApiResponse<>(false, null, errorMessage, status.value());
-        apiResponse.setErrors(errors);
-        return ResponseEntity.status(status).body(apiResponse);
+        CustomApiResponse<T> customApiResponse = new CustomApiResponse<>(false, null, errorMessage, status.value());
+        customApiResponse.setErrors(errors);
+        return ResponseEntity.status(status).body(customApiResponse);
     }
 
     /**

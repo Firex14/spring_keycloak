@@ -1,8 +1,24 @@
 services:
 
+  spring-keycloak:
+    build:
+      context: .
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - APP_PORT=${APP_PORT}
+    ports:
+      - "8001:8001"
+    depends_on:
+      - keycloak
+      - postgres
+
   keycloak:
     build:
-      context: ./keycloak # Utilise le Dockerfile dans le répertoire "keycloak"
+      context: ./keycloak
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
