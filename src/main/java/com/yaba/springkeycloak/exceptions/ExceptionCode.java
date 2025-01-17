@@ -7,7 +7,13 @@ public enum ExceptionCode {
 
     CATEGORY_ALREADY_EXISTS(4000, "Cette categorie existe déjà"),
     CATEGORY_NOT_FOUND(4001, "Cette categorie n'existe pas"),
-    NULL_VALUE_OF_ID(5000, "L'id ne doit pas être nul");
+
+
+    BOOK_ALREADY_EXISTS(5000, "Ce livre existe déjà"),
+    BOOK_NOT_FOUND(5001, "Ce livre n'existe pas"),
+
+
+    NULL_VALUE_OF_ID(6000, "L'id ne doit pas être nul");
 
     private final int value;
     private final String message;

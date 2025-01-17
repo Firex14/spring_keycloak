@@ -1,7 +1,7 @@
 package com.yaba.springkeycloak.web.query;
 
-import com.yaba.springkeycloak.dto.CategoryDto;
-import com.yaba.springkeycloak.service.query.CategoryQueryService;
+import com.yaba.springkeycloak.dto.BookDto;
+import com.yaba.springkeycloak.service.query.BookQueryService;
 import com.yaba.springkeycloak.utils.CustomApiResponse;
 import com.yaba.springkeycloak.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,46 +20,47 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(CategoryQueryController.CATEGORY_QUERY_ROUTE)
-public class CategoryQueryController {
-    public static final String CATEGORY_QUERY_ROUTE = "/query/categories";
-    private final CategoryQueryService queryService;
+@RequestMapping(BookQueryController.BOOK_QUERY_ROUTE)
+public class BookQueryController {
+    public static final String BOOK_QUERY_ROUTE = "/query/books";
 
-    public CategoryQueryController(CategoryQueryService queryService) {
+    private final BookQueryService queryService;
+
+    public BookQueryController(BookQueryService queryService) {
         this.queryService = queryService;
     }
 
     @Operation(
-            summary = "Récupérer toutes les catégories",
-            description = "Cette API permet de récupérer toutes les catégories avec un support de pagination."
+            summary = "Récupérer tous les livres",
+            description = "Cette API permet de récupérer tous les livres avec un support de pagination."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Liste des catégories récupérée avec succès"),
+            @ApiResponse(responseCode = "200", description = "Liste des livres récupérée avec succès"),
             @ApiResponse(responseCode = "400", description = "Requête invalide"),
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @GetMapping
-    public ResponseEntity<CustomApiResponse<Page<CategoryDto>>> getAll(
+    public ResponseEntity<CustomApiResponse<Page<BookDto>>> getAll(
             @Parameter(description = "Détails de la pagination (page, taille, etc.)") Pageable pageable) {
-        Page<CategoryDto> categories = queryService.getAll(pageable);
+        Page<BookDto> books = queryService.getAll(pageable);
         return ResponseUtils.buildSuccessResponse(
-                categories,
+                books,
                 "SUCCESS",
                 HttpStatus.OK
         );
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Catégorie récupérer avec succès"),
+            @ApiResponse(responseCode = "200", description = "Livre récupérer avec succès"),
             @ApiResponse(responseCode = "400", description = "Requête invalide"),
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<CustomApiResponse<CategoryDto>> getOneById(
-            @Parameter(description = "Id de la catégorie à récupérer.") @PathVariable UUID id) {
-        CategoryDto category = queryService.getOne(id);
+    public ResponseEntity<CustomApiResponse<BookDto>> getOneById(
+            @Parameter(description = "Id du livre à récupérer.") @PathVariable UUID id) {
+        BookDto book = queryService.getOne(id);
         return ResponseUtils.buildSuccessResponse(
-                category,
+                book,
                 "SUCCESS",
                 HttpStatus.OK
         );

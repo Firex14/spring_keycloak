@@ -8,6 +8,7 @@ import java.util.UUID;
 
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
+@Builder
 public class BookDto {
     private UUID id;
     private String title;

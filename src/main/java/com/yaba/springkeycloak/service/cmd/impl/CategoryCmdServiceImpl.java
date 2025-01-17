@@ -11,6 +11,8 @@ import com.yaba.springkeycloak.service.cmd.CategoryCmdService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class CategoryCmdServiceImpl implements CategoryCmdService {
 
@@ -43,15 +45,23 @@ public class CategoryCmdServiceImpl implements CategoryCmdService {
     public CategoryDto update(CategoryDto dto) {
         if (dto.getId() == null) {
             throw new ApiRequestException(
-                    ExceptionCode.CATEGORY_NOT_FOUND.getMessage(),
-                    ExceptionCode.CATEGORY_NOT_FOUND.getValue(),
+                    ExceptionCode.NULL_VALUE_OF_ID.getMessage(),
+                    ExceptionCode.NULL_VALUE_OF_ID.getValue(),
                     ExceptionLevel.ERROR,
-                    HttpStatus.NOT_FOUND
+                    HttpStatus.BAD_REQUEST
 
             );
         }
         return repository.findById(dto.getId()).map(
                 category -> {
+                    if (isExistExceptCurrent(dto.getName(), category.getId())) {
+                        throw new ApiRequestException(
+                                ExceptionCode.CATEGORY_ALREADY_EXISTS.getMessage(),
+                                ExceptionCode.CATEGORY_ALREADY_EXISTS.getValue(),
+                                ExceptionLevel.ERROR,
+                                HttpStatus.CONFLICT
+                        );
+                    }
                     mapper.partialUpdate(category, dto);
                     return mapper.toDto(repository.save(category));
                 }
@@ -65,6 +75,10 @@ public class CategoryCmdServiceImpl implements CategoryCmdService {
 
     private boolean isExist(String name) {
         return repository.existsByNameIgnoreCase(name);
+    }
+
+    private boolean isExistExceptCurrent(String name, UUID categoryId) {
+        return repository.existsByNameIgnoreCaseAndIdNot(name, categoryId);
     }
 
 }
