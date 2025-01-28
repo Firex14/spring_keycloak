@@ -1,10 +1,10 @@
 package com.yaba.springkeycloak.service.query.impl;
 
-import com.yaba.springkeycloak.dto.BookDto;
+import com.yaba.springkeycloak.exchange.response.BookResponse;
 import com.yaba.springkeycloak.exceptions.ApiRequestException;
 import com.yaba.springkeycloak.exceptions.ExceptionCode;
 import com.yaba.springkeycloak.exceptions.ExceptionLevel;
-import com.yaba.springkeycloak.mapper.BookMapper;
+import com.yaba.springkeycloak.mapper.book.BookMapper;
 import com.yaba.springkeycloak.repository.BookRepository;
 import com.yaba.springkeycloak.service.query.BookQueryService;
 import org.springframework.data.domain.Page;
@@ -25,12 +25,12 @@ public class BookQueryServiceImpl implements BookQueryService {
     }
 
     @Override
-    public Page<BookDto> getAll(Pageable pageable) {
+    public Page<BookResponse> getAll(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::toDto);
     }
 
     @Override
-    public BookDto getOne(UUID id) {
+    public BookResponse getOne(UUID id) {
         return repository.findById(id).map(mapper::toDto).orElseThrow(
                 ()-> new ApiRequestException(
                         ExceptionCode.BOOK_NOT_FOUND.getMessage(),

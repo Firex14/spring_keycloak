@@ -1,10 +1,10 @@
 package com.yaba.springkeycloak.service.query.impl;
 
-import com.yaba.springkeycloak.dto.CategoryDto;
+import com.yaba.springkeycloak.exchange.response.CategoryResponse;
 import com.yaba.springkeycloak.exceptions.ApiRequestException;
 import com.yaba.springkeycloak.exceptions.ExceptionCode;
 import com.yaba.springkeycloak.exceptions.ExceptionLevel;
-import com.yaba.springkeycloak.mapper.CategoryMapper;
+import com.yaba.springkeycloak.mapper.category.CategoryMapper;
 import com.yaba.springkeycloak.repository.CategoryRepository;
 import com.yaba.springkeycloak.service.query.CategoryQueryService;
 import org.springframework.data.domain.Page;
@@ -25,12 +25,12 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
     }
 
     @Override
-    public Page<CategoryDto> getAll(Pageable pageable) {
+    public Page<CategoryResponse> getAll(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::toDto);
     }
 
     @Override
-    public CategoryDto getOne(UUID id) {
+    public CategoryResponse getOne(UUID id) {
         return repository.findById(id).map(mapper::toDto).orElseThrow(() -> new ApiRequestException(
                 ExceptionCode.CATEGORY_NOT_FOUND.getMessage(),
                 ExceptionCode.CATEGORY_NOT_FOUND.getValue(),

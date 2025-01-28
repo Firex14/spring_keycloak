@@ -1,12 +1,16 @@
 package com.yaba.springkeycloak.service.cmd.impl;
 
-import com.yaba.springkeycloak.dto.BookDto;
+import com.yaba.springkeycloak.exchange.request.book.BookCreateRequest;
+import com.yaba.springkeycloak.exchange.request.book.BookUpdateRequest;
+import com.yaba.springkeycloak.exchange.response.BookResponse;
 import com.yaba.springkeycloak.entities.Book;
 import com.yaba.springkeycloak.entities.Category;
 import com.yaba.springkeycloak.exceptions.ApiRequestException;
 import com.yaba.springkeycloak.exceptions.ExceptionCode;
 import com.yaba.springkeycloak.exceptions.ExceptionLevel;
-import com.yaba.springkeycloak.mapper.BookMapper;
+import com.yaba.springkeycloak.mapper.book.BookCreateMapper;
+import com.yaba.springkeycloak.mapper.book.BookMapper;
+import com.yaba.springkeycloak.mapper.book.BookUpdateMapper;
 import com.yaba.springkeycloak.repository.BookRepository;
 import com.yaba.springkeycloak.repository.CategoryRepository;
 import com.yaba.springkeycloak.service.cmd.BookCmdService;
@@ -20,17 +24,21 @@ public class BookCmdServiceImpl implements BookCmdService {
 
     private final BookRepository repository;
     private final CategoryRepository categoryRepository;
-    private final BookMapper mapper;
+    private final BookMapper responseMapper;
+    private final BookCreateMapper createMapper;
+    private final BookUpdateMapper bookUpdateMapper;
 
-    public BookCmdServiceImpl(BookRepository repository, CategoryRepository categoryRepository, BookMapper mapper) {
+    public BookCmdServiceImpl(BookRepository repository, CategoryRepository categoryRepository, BookMapper mapper, BookCreateMapper createMapper, BookUpdateMapper bookUpdateMapper) {
         this.repository = repository;
         this.categoryRepository = categoryRepository;
-        this.mapper = mapper;
+        this.responseMapper = mapper;
+        this.createMapper = createMapper;
+        this.bookUpdateMapper = bookUpdateMapper;
     }
 
     @Override
-    public BookDto save(BookDto bookDto) {
-        Category category = categoryRepository.findById(bookDto.getCategoryId())
+    public BookResponse save(BookCreateRequest request) {
+        Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() ->  new ApiRequestException(
                 ExceptionCode.CATEGORY_NOT_FOUND.getMessage(),
                 ExceptionCode.CATEGORY_NOT_FOUND.getValue(),
@@ -38,7 +46,7 @@ public class BookCmdServiceImpl implements BookCmdService {
                 HttpStatus.NOT_FOUND
 
         ));
-        if (isExist(bookDto.getAuthor(), bookDto.getTitle())){
+        if (isExist(request.getAuthor(), request.getTitle())){
             throw new ApiRequestException(
                     ExceptionCode.BOOK_ALREADY_EXISTS.getMessage(),
                     ExceptionCode.BOOK_ALREADY_EXISTS.getValue(),
@@ -47,15 +55,15 @@ public class BookCmdServiceImpl implements BookCmdService {
             );
         }
 
-        Book newBook = mapper.toEntity(bookDto);
+        Book newBook = createMapper.toEntity(request);
         newBook.setCategory(category);
 
-        return mapper.toDto(repository.save(newBook));
+        return responseMapper.toDto(repository.save(newBook));
     }
 
     @Override
-    public BookDto update(BookDto bookDto) {
-        if (bookDto.getId() == null) {
+    public BookResponse update(BookUpdateRequest updateRequest) {
+        if (updateRequest.getId() == null) {
             throw new ApiRequestException(
                     ExceptionCode.NULL_VALUE_OF_ID.getMessage(),
                     ExceptionCode.NULL_VALUE_OF_ID.getValue(),
@@ -65,8 +73,8 @@ public class BookCmdServiceImpl implements BookCmdService {
         }
 
         Category category;
-        if (bookDto.getCategoryId() != null) {
-             category = categoryRepository.findById(bookDto.getCategoryId())
+        if (updateRequest.getCategoryId() != null) {
+             category = categoryRepository.findById(updateRequest.getCategoryId())
                     .orElseThrow(() -> new ApiRequestException(
                             ExceptionCode.CATEGORY_NOT_FOUND.getMessage(),
                             ExceptionCode.CATEGORY_NOT_FOUND.getValue(),
@@ -77,9 +85,9 @@ public class BookCmdServiceImpl implements BookCmdService {
             category = null;
         }
 
-        return repository.findById(bookDto.getId()).map(
+        return repository.findById(updateRequest.getId()).map(
                 existingBook -> {
-                    if (isExistExceptCurrent(bookDto.getAuthor(), bookDto.getTitle(), bookDto.getId())) {
+                    if (isExistExceptCurrent(updateRequest.getAuthor(), updateRequest.getTitle(), updateRequest.getId())) {
                         throw new ApiRequestException(
                                 ExceptionCode.BOOK_ALREADY_EXISTS.getMessage(),
                                 ExceptionCode.BOOK_ALREADY_EXISTS.getValue(),
@@ -87,9 +95,9 @@ public class BookCmdServiceImpl implements BookCmdService {
                                 HttpStatus.CONFLICT
                         );
                     }
-                    mapper.partialUpdate(existingBook, bookDto);
+                    bookUpdateMapper.partialUpdate(existingBook, updateRequest);
                     existingBook.setCategory(category);
-                    return mapper.toDto(repository.save(existingBook));
+                    return responseMapper.toDto(repository.save(existingBook));
                 }
                 )
                 .orElseThrow(() -> new ApiRequestException(

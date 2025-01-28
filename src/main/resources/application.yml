@@ -3,6 +3,7 @@ spring:
     name: Spring-keycloak
     version: 1.0.0
 
+
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
@@ -21,7 +22,19 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_BASE_URL}/realms/${KEYCLOAK_REALM}
 
 server:
   port: ${APP_PORT}  # Port exposé pour l'application Spring Boot
+
+application:
+  keycloak:
+    baseurl: ${KEYCLOAK_BASE_URL}
+    client-id: ${KEYCLOAK_CLIENT_ID}
+    client-secret: ${KEYCLOAK_CLIENT_SECRET}
+    realm: ${KEYCLOAK_REALM}
 

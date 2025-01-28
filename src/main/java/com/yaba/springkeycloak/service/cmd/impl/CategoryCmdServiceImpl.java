@@ -1,11 +1,14 @@
 package com.yaba.springkeycloak.service.cmd.impl;
 
-import com.yaba.springkeycloak.dto.CategoryDto;
+import com.yaba.springkeycloak.exchange.request.category.CategoryCreateRequest;
+import com.yaba.springkeycloak.exchange.request.category.CategoryUpdateRequest;
+import com.yaba.springkeycloak.exchange.response.CategoryResponse;
 import com.yaba.springkeycloak.entities.Category;
 import com.yaba.springkeycloak.exceptions.ApiRequestException;
 import com.yaba.springkeycloak.exceptions.ExceptionCode;
 import com.yaba.springkeycloak.exceptions.ExceptionLevel;
-import com.yaba.springkeycloak.mapper.CategoryMapper;
+import com.yaba.springkeycloak.mapper.category.CategoryMapper;
+import com.yaba.springkeycloak.mapper.category.CategoryUpdateMapper;
 import com.yaba.springkeycloak.repository.CategoryRepository;
 import com.yaba.springkeycloak.service.cmd.CategoryCmdService;
 import org.springframework.http.HttpStatus;
@@ -18,15 +21,17 @@ public class CategoryCmdServiceImpl implements CategoryCmdService {
 
     private final CategoryRepository repository;
     private final CategoryMapper mapper;
+    private final CategoryUpdateMapper categoryUpdateMapper;
 
-    public CategoryCmdServiceImpl(CategoryRepository repository, CategoryMapper mapper) {
+    public CategoryCmdServiceImpl(CategoryRepository repository, CategoryMapper mapper, CategoryUpdateMapper categoryUpdateMapper) {
         this.repository = repository;
         this.mapper = mapper;
+        this.categoryUpdateMapper = categoryUpdateMapper;
     }
 
     @Override
-    public CategoryDto save(CategoryDto dto) {
-        if (isExist(dto.getName())){
+    public CategoryResponse save(CategoryCreateRequest createRequest) {
+        if (isExist(createRequest.getName())){
             throw new ApiRequestException(
                     ExceptionCode.CATEGORY_ALREADY_EXISTS.getMessage(),
                     ExceptionCode.CATEGORY_ALREADY_EXISTS.getValue(),
@@ -35,15 +40,15 @@ public class CategoryCmdServiceImpl implements CategoryCmdService {
                 );
             }
         Category newCategory = new Category();
-        newCategory.setName(dto.getName());
-        newCategory.setDescription(dto.getDescription());
+        newCategory.setName(createRequest.getName());
+        newCategory.setDescription(createRequest.getDescription());
 
         return mapper.toDto(repository.save(newCategory));
     }
 
     @Override
-    public CategoryDto update(CategoryDto dto) {
-        if (dto.getId() == null) {
+    public CategoryResponse update(CategoryUpdateRequest updateRequest) {
+        if (updateRequest.getId() == null) {
             throw new ApiRequestException(
                     ExceptionCode.NULL_VALUE_OF_ID.getMessage(),
                     ExceptionCode.NULL_VALUE_OF_ID.getValue(),
@@ -52,9 +57,9 @@ public class CategoryCmdServiceImpl implements CategoryCmdService {
 
             );
         }
-        return repository.findById(dto.getId()).map(
+        return repository.findById(updateRequest.getId()).map(
                 category -> {
-                    if (isExistExceptCurrent(dto.getName(), category.getId())) {
+                    if (isExistExceptCurrent(updateRequest.getName(), category.getId())) {
                         throw new ApiRequestException(
                                 ExceptionCode.CATEGORY_ALREADY_EXISTS.getMessage(),
                                 ExceptionCode.CATEGORY_ALREADY_EXISTS.getValue(),
@@ -62,7 +67,7 @@ public class CategoryCmdServiceImpl implements CategoryCmdService {
                                 HttpStatus.CONFLICT
                         );
                     }
-                    mapper.partialUpdate(category, dto);
+                    categoryUpdateMapper.partialUpdate(category, updateRequest);
                     return mapper.toDto(repository.save(category));
                 }
         ).orElseThrow(()-> new ApiRequestException(

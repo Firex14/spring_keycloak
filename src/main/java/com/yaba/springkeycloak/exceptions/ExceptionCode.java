@@ -13,7 +13,9 @@ public enum ExceptionCode {
     BOOK_NOT_FOUND(5001, "Ce livre n'existe pas"),
 
 
-    NULL_VALUE_OF_ID(6000, "L'id ne doit pas être nul");
+    NULL_VALUE_OF_ID(6000, "L'id ne doit pas être nul"),
+
+    USER_ALREADY_EXISTS(7000, "Nom d'utilisateur ou adresse email déjà utilisé");
 
     private final int value;
     private final String message;

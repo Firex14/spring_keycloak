@@ -1,11 +1,13 @@
 package com.yaba.springkeycloak.service.cmd;
 
-import com.yaba.springkeycloak.dto.CategoryDto;
+import com.yaba.springkeycloak.exchange.request.category.CategoryCreateRequest;
+import com.yaba.springkeycloak.exchange.request.category.CategoryUpdateRequest;
+import com.yaba.springkeycloak.exchange.response.CategoryResponse;
 
 public interface CategoryCmdService {
 
-    CategoryDto save(CategoryDto dto);
+    CategoryResponse save(CategoryCreateRequest dto);
 
-    CategoryDto update(CategoryDto dto);
+    CategoryResponse update(CategoryUpdateRequest dto);
 
 }

@@ -1,4 +1,4 @@
-package com.yaba.springkeycloak.dto;
+package com.yaba.springkeycloak.exchange.response;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryDto {
+public class CategoryResponse {
     private UUID id;
     private String name;
     private ZonedDateTime createdAt;

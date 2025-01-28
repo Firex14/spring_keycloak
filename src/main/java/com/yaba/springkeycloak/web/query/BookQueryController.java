@@ -1,6 +1,6 @@
 package com.yaba.springkeycloak.web.query;
 
-import com.yaba.springkeycloak.dto.BookDto;
+import com.yaba.springkeycloak.exchange.response.BookResponse;
 import com.yaba.springkeycloak.service.query.BookQueryService;
 import com.yaba.springkeycloak.utils.CustomApiResponse;
 import com.yaba.springkeycloak.utils.ResponseUtils;
@@ -40,9 +40,9 @@ public class BookQueryController {
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @GetMapping
-    public ResponseEntity<CustomApiResponse<Page<BookDto>>> getAll(
+    public ResponseEntity<CustomApiResponse<Page<BookResponse>>> getAll(
             @Parameter(description = "Détails de la pagination (page, taille, etc.)") Pageable pageable) {
-        Page<BookDto> books = queryService.getAll(pageable);
+        Page<BookResponse> books = queryService.getAll(pageable);
         return ResponseUtils.buildSuccessResponse(
                 books,
                 "SUCCESS",
@@ -56,9 +56,9 @@ public class BookQueryController {
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<CustomApiResponse<BookDto>> getOneById(
+    public ResponseEntity<CustomApiResponse<BookResponse>> getOneById(
             @Parameter(description = "Id du livre à récupérer.") @PathVariable UUID id) {
-        BookDto book = queryService.getOne(id);
+        BookResponse book = queryService.getOne(id);
         return ResponseUtils.buildSuccessResponse(
                 book,
                 "SUCCESS",

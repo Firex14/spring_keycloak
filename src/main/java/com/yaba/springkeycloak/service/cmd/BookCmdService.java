@@ -1,9 +1,11 @@
 package com.yaba.springkeycloak.service.cmd;
 
-import com.yaba.springkeycloak.dto.BookDto;
+import com.yaba.springkeycloak.exchange.request.book.BookCreateRequest;
+import com.yaba.springkeycloak.exchange.request.book.BookUpdateRequest;
+import com.yaba.springkeycloak.exchange.response.BookResponse;
 
 public interface BookCmdService {
 
-    BookDto save(BookDto bookDto);
-    BookDto update(BookDto bookDto);
+    BookResponse save(BookCreateRequest createRequest);
+    BookResponse update(BookUpdateRequest updateRequest);
 }

@@ -1,6 +1,8 @@
 package com.yaba.springkeycloak.web.cmd;
 
-import com.yaba.springkeycloak.dto.BookDto;
+import com.yaba.springkeycloak.exchange.request.book.BookCreateRequest;
+import com.yaba.springkeycloak.exchange.request.book.BookUpdateRequest;
+import com.yaba.springkeycloak.exchange.response.BookResponse;
 import com.yaba.springkeycloak.service.cmd.BookCmdService;
 import com.yaba.springkeycloak.utils.CustomApiResponse;
 import com.yaba.springkeycloak.utils.ResponseUtils;
@@ -33,9 +35,9 @@ public class BookCmdController {
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @PostMapping
-    public ResponseEntity<CustomApiResponse<BookDto>> create(
-            @Parameter(description = "Détails du livre à sauvegarder") @RequestBody BookDto request) {
-        BookDto result = cmdService.save(request);
+    public ResponseEntity<CustomApiResponse<BookResponse>> create(
+            @Parameter(description = "Détails du livre à sauvegarder") @RequestBody BookCreateRequest request) {
+        BookResponse result = cmdService.save(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
 
@@ -50,9 +52,9 @@ public class BookCmdController {
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @PutMapping
-    public ResponseEntity<CustomApiResponse<BookDto>> update(
-            @Parameter(description = "Détails du livre à mettre à jour") @RequestBody BookDto request) {
-        BookDto result = cmdService.update(request);
+    public ResponseEntity<CustomApiResponse<BookResponse>> update(
+            @Parameter(description = "Détails du livre à mettre à jour") @RequestBody BookUpdateRequest request) {
+        BookResponse result = cmdService.update(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
 }

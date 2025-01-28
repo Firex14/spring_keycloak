@@ -1,6 +1,8 @@
 package com.yaba.springkeycloak.web.cmd;
 
-import com.yaba.springkeycloak.dto.CategoryDto;
+import com.yaba.springkeycloak.exchange.request.category.CategoryCreateRequest;
+import com.yaba.springkeycloak.exchange.request.category.CategoryUpdateRequest;
+import com.yaba.springkeycloak.exchange.response.CategoryResponse;
 import com.yaba.springkeycloak.service.cmd.CategoryCmdService;
 import com.yaba.springkeycloak.utils.CustomApiResponse;
 import com.yaba.springkeycloak.utils.ResponseUtils;
@@ -33,9 +35,9 @@ public class CategoryCmdController {
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @PostMapping
-    public ResponseEntity<CustomApiResponse<CategoryDto>> create(
-            @Parameter(description = "Détails de la catégorie à créer") @RequestBody CategoryDto request) {
-        CategoryDto result = cmdService.save(request);
+    public ResponseEntity<CustomApiResponse<CategoryResponse>> create(
+            @Parameter(description = "Détails de la catégorie à créer") @RequestBody CategoryCreateRequest request) {
+        CategoryResponse result = cmdService.save(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
 
@@ -50,9 +52,9 @@ public class CategoryCmdController {
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @PutMapping
-    public ResponseEntity<CustomApiResponse<CategoryDto>> update(
-            @Parameter(description = "Détails de la catégorie à mettre à jour") @RequestBody CategoryDto request) {
-        CategoryDto result = cmdService.update(request);
+    public ResponseEntity<CustomApiResponse<CategoryResponse>> update(
+            @Parameter(description = "Détails de la catégorie à mettre à jour") @RequestBody CategoryUpdateRequest request) {
+        CategoryResponse result = cmdService.update(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
 }
