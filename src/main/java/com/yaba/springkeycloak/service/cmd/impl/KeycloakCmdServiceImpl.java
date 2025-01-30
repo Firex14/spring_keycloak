@@ -3,6 +3,7 @@ package com.yaba.springkeycloak.service.cmd.impl;
 import com.yaba.springkeycloak.exceptions.ApiRequestException;
 import com.yaba.springkeycloak.exceptions.ExceptionCode;
 import com.yaba.springkeycloak.exceptions.ExceptionLevel;
+import com.yaba.springkeycloak.exchange.request.user.UserUpdateRequest;
 import com.yaba.springkeycloak.exchange.request.user.UserCreateRequest;
 import com.yaba.springkeycloak.service.cmd.KeycloakCmdService;
 import com.yaba.springkeycloak.utils.PasswordUtil;
@@ -17,9 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import jakarta.ws.rs.NotFoundException;
+
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class KeycloakCmdServiceImpl implements KeycloakCmdService {
@@ -81,6 +85,45 @@ public class KeycloakCmdServiceImpl implements KeycloakCmdService {
         }
 
     }
+    @Override
+    public UserRepresentation updateUser(UserUpdateRequest updateRequest) {
+        log.info("Updating user: {}", updateRequest.getId());
+
+        UserResource userResource = getUserById(updateRequest.getId());
+        UserRepresentation user = userResource.toRepresentation();
+
+        user.setFirstName(updateRequest.getFirstName());
+        user.setLastName(updateRequest.getLastName());
+
+        userResource.update(user);
+
+        log.info("User {} updated successfully", updateRequest.getId());
+        return userResource.toRepresentation();
+    }
+
+
+    private UserResource getUserById(UUID userId) {
+        try {
+            return keycloak.realm(realm).users().get(String.valueOf(userId));
+        } catch (NotFoundException e) {
+            throw new ApiRequestException(
+                    ExceptionCode.USER_NOT_FOUND.getMessage(),
+                    ExceptionCode.USER_NOT_FOUND.getValue(),
+                    ExceptionLevel.ERROR,
+                    HttpStatus.NOT_FOUND
+            );
+        } catch (Exception e) {
+            log.error("Error fetching user with ID {}", userId, e);
+            throw new ApiRequestException(
+                    ExceptionCode.INTERNAL_SERVER_ERROR.getMessage(),
+                    ExceptionCode.INTERNAL_SERVER_ERROR.getValue(),
+                    ExceptionLevel.ERROR,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+
 
     private boolean isUserExistByUsername(String username) {
         List<UserRepresentation> users = keycloak.realm(realm).users().search(username, 0, 10);

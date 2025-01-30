@@ -2,6 +2,7 @@ package com.yaba.springkeycloak.web.cmd;
 
 
 import com.yaba.springkeycloak.exchange.request.user.UserCreateRequest;
+import com.yaba.springkeycloak.exchange.request.user.UserUpdateRequest;
 import com.yaba.springkeycloak.service.cmd.KeycloakCmdService;
 import com.yaba.springkeycloak.utils.CustomApiResponse;
 import com.yaba.springkeycloak.utils.ResponseUtils;
@@ -42,6 +43,24 @@ public class KeycloakCmdController {
             @Parameter(description = "Détails du Bibliothécaire à sauvegarder") @RequestBody UserCreateRequest request) {
         log.info("********* Request to create a new user *********");
         UserRepresentation result = cmdService.save(request);
+        return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
+    }
+
+
+    @Operation(
+            summary = "Mettre à jour un utilisateur existant",
+            description = "Cette API permet de mettre à jour un utilisateur existant en utilisant les informations fournies."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Utilisateur mis à jour avec succès"),
+            @ApiResponse(responseCode = "400", description = "Requête invalide"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
+    @PutMapping
+    public ResponseEntity<CustomApiResponse<UserRepresentation>> update(
+            @Parameter(description = "Détails de l'utilisateur à mettre à jour") @RequestBody UserUpdateRequest request) {
+        UserRepresentation result = cmdService.updateUser(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
 

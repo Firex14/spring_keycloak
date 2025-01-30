@@ -14,8 +14,10 @@ public enum ExceptionCode {
 
 
     NULL_VALUE_OF_ID(6000, "L'id ne doit pas être nul"),
+    INTERNAL_SERVER_ERROR(6001, "Erreur de serveur interne."),
 
-    USER_ALREADY_EXISTS(7000, "Nom d'utilisateur ou adresse email déjà utilisé");
+    USER_ALREADY_EXISTS(7000, "Nom d'utilisateur ou adresse email déjà utilisé"),
+    USER_NOT_FOUND(7001, "Utilisateur non trouvé.");
 
     private final int value;
     private final String message;
