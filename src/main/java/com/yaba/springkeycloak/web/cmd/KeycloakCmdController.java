@@ -1,7 +1,7 @@
 package com.yaba.springkeycloak.web.cmd;
 
 
-import com.yaba.springkeycloak.exchange.request.user.UserCreateRequest;
+import com.yaba.springkeycloak.exchange.request.user.UserCreationRequest;
 import com.yaba.springkeycloak.exchange.request.user.UserUpdateRequest;
 import com.yaba.springkeycloak.service.cmd.KeycloakCmdService;
 import com.yaba.springkeycloak.utils.CustomApiResponse;
@@ -40,7 +40,7 @@ public class KeycloakCmdController {
     })
     @PostMapping
     public ResponseEntity<CustomApiResponse<UserRepresentation>> create(
-            @Parameter(description = "Détails du Bibliothécaire à sauvegarder") @RequestBody UserCreateRequest request) {
+            @Parameter(description = "Détails du Bibliothécaire à sauvegarder") @RequestBody UserCreationRequest request) {
         log.info("********* Request to create a new user *********");
         UserRepresentation result = cmdService.save(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);

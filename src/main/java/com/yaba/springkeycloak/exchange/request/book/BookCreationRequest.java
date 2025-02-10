@@ -8,7 +8,7 @@ import java.util.UUID;
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @Builder
-public class BookCreateRequest {
+public class BookCreationRequest {
     private String title;
     private String author;
     private int stock;

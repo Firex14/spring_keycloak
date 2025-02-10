@@ -1,6 +1,6 @@
 package com.yaba.springkeycloak.service.cmd.impl;
 
-import com.yaba.springkeycloak.exchange.request.book.BookCreateRequest;
+import com.yaba.springkeycloak.exchange.request.book.BookCreationRequest;
 import com.yaba.springkeycloak.exchange.request.book.BookUpdateRequest;
 import com.yaba.springkeycloak.exchange.response.BookResponse;
 import com.yaba.springkeycloak.entities.Book;
@@ -14,6 +14,8 @@ import com.yaba.springkeycloak.mapper.book.BookUpdateMapper;
 import com.yaba.springkeycloak.repository.BookRepository;
 import com.yaba.springkeycloak.repository.CategoryRepository;
 import com.yaba.springkeycloak.service.cmd.BookCmdService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import java.util.UUID;
 
 @Service
 public class BookCmdServiceImpl implements BookCmdService {
+    private final Logger log = LoggerFactory.getLogger(BookCmdServiceImpl.class);
+
 
     private final BookRepository repository;
     private final CategoryRepository categoryRepository;
@@ -37,7 +41,8 @@ public class BookCmdServiceImpl implements BookCmdService {
     }
 
     @Override
-    public BookResponse save(BookCreateRequest request) {
+    public BookResponse save(BookCreationRequest request) {
+
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() ->  new ApiRequestException(
                 ExceptionCode.CATEGORY_NOT_FOUND.getMessage(),

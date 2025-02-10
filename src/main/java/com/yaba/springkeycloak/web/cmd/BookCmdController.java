@@ -1,6 +1,6 @@
 package com.yaba.springkeycloak.web.cmd;
 
-import com.yaba.springkeycloak.exchange.request.book.BookCreateRequest;
+import com.yaba.springkeycloak.exchange.request.book.BookCreationRequest;
 import com.yaba.springkeycloak.exchange.request.book.BookUpdateRequest;
 import com.yaba.springkeycloak.exchange.response.BookResponse;
 import com.yaba.springkeycloak.service.cmd.BookCmdService;
@@ -36,7 +36,7 @@ public class BookCmdController {
     })
     @PostMapping
     public ResponseEntity<CustomApiResponse<BookResponse>> create(
-            @Parameter(description = "Détails du livre à sauvegarder") @RequestBody BookCreateRequest request) {
+            @Parameter(description = "Détails du livre à sauvegarder") @RequestBody BookCreationRequest request) {
         BookResponse result = cmdService.save(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }

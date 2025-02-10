@@ -1,6 +1,6 @@
 package com.yaba.springkeycloak.service.cmd.impl;
 
-import com.yaba.springkeycloak.exchange.request.category.CategoryCreateRequest;
+import com.yaba.springkeycloak.exchange.request.category.CategoryCreationRequest;
 import com.yaba.springkeycloak.exchange.request.category.CategoryUpdateRequest;
 import com.yaba.springkeycloak.exchange.response.CategoryResponse;
 import com.yaba.springkeycloak.entities.Category;
@@ -30,7 +30,7 @@ public class CategoryCmdServiceImpl implements CategoryCmdService {
     }
 
     @Override
-    public CategoryResponse save(CategoryCreateRequest createRequest) {
+    public CategoryResponse save(CategoryCreationRequest createRequest) {
         if (isExist(createRequest.getName())){
             throw new ApiRequestException(
                     ExceptionCode.CATEGORY_ALREADY_EXISTS.getMessage(),

@@ -12,6 +12,9 @@ public enum ExceptionCode {
     BOOK_ALREADY_EXISTS(5000, "Ce livre existe déjà"),
     BOOK_NOT_FOUND(5001, "Ce livre n'existe pas"),
 
+    READER_ALREADY_EXISTS(3000, "Cet adresse email est déjà utilisé"),
+    READER_NOT_FOUND(3001, "Ce lecteur n'existe pas"),
+
 
     NULL_VALUE_OF_ID(6000, "L'id ne doit pas être nul"),
     INTERNAL_SERVER_ERROR(6001, "Erreur de serveur interne."),

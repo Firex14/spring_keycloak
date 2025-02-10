@@ -4,7 +4,7 @@ import com.yaba.springkeycloak.exceptions.ApiRequestException;
 import com.yaba.springkeycloak.exceptions.ExceptionCode;
 import com.yaba.springkeycloak.exceptions.ExceptionLevel;
 import com.yaba.springkeycloak.exchange.request.user.UserUpdateRequest;
-import com.yaba.springkeycloak.exchange.request.user.UserCreateRequest;
+import com.yaba.springkeycloak.exchange.request.user.UserCreationRequest;
 import com.yaba.springkeycloak.service.cmd.KeycloakCmdService;
 import com.yaba.springkeycloak.utils.PasswordUtil;
 import jakarta.ws.rs.core.Response;
@@ -39,7 +39,7 @@ public class KeycloakCmdServiceImpl implements KeycloakCmdService {
     }
 
     @Override
-    public UserRepresentation save(UserCreateRequest createRequest) {
+    public UserRepresentation save(UserCreationRequest createRequest) {
         log.info("Request to save a user");
 
         UserRepresentation user = new UserRepresentation();

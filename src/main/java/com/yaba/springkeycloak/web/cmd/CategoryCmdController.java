@@ -1,6 +1,6 @@
 package com.yaba.springkeycloak.web.cmd;
 
-import com.yaba.springkeycloak.exchange.request.category.CategoryCreateRequest;
+import com.yaba.springkeycloak.exchange.request.category.CategoryCreationRequest;
 import com.yaba.springkeycloak.exchange.request.category.CategoryUpdateRequest;
 import com.yaba.springkeycloak.exchange.response.CategoryResponse;
 import com.yaba.springkeycloak.service.cmd.CategoryCmdService;
@@ -36,7 +36,7 @@ public class CategoryCmdController {
     })
     @PostMapping
     public ResponseEntity<CustomApiResponse<CategoryResponse>> create(
-            @Parameter(description = "Détails de la catégorie à créer") @RequestBody CategoryCreateRequest request) {
+            @Parameter(description = "Détails de la catégorie à créer") @RequestBody CategoryCreationRequest request) {
         CategoryResponse result = cmdService.save(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
