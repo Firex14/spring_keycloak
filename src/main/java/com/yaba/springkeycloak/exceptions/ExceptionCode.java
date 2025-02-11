@@ -8,12 +8,13 @@ public enum ExceptionCode {
     CATEGORY_ALREADY_EXISTS(4000, "Cette categorie existe déjà"),
     CATEGORY_NOT_FOUND(4001, "Cette categorie n'existe pas"),
 
-
     BOOK_ALREADY_EXISTS(5000, "Ce livre existe déjà"),
     BOOK_NOT_FOUND(5001, "Ce livre n'existe pas"),
 
     READER_ALREADY_EXISTS(3000, "Cet adresse email est déjà utilisé"),
-    READER_NOT_FOUND(3001, "Ce lecteur n'existe pas"),
+    READER_NOT_FOUND(3001, "Ce lecteur n'existe pas."),
+    TOO_MANY_BORROWED_BOOKS(3002, "Limite de prêt atteint." ),
+    LOAN_NOT_FOUND(3003, "Ce prêt n'existe pas." ),
 
 
     NULL_VALUE_OF_ID(6000, "L'id ne doit pas être nul"),

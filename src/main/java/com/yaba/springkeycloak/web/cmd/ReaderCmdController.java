@@ -1,10 +1,8 @@
 package com.yaba.springkeycloak.web.cmd;
 
 import com.yaba.springkeycloak.enums.ReaderStatus;
-import com.yaba.springkeycloak.exchange.request.category.CategoryUpdateRequest;
 import com.yaba.springkeycloak.exchange.request.reader.ReaderCreationRequest;
 import com.yaba.springkeycloak.exchange.request.reader.ReaderUpdateRequest;
-import com.yaba.springkeycloak.exchange.response.CategoryResponse;
 import com.yaba.springkeycloak.exchange.response.ReaderResponse;
 import com.yaba.springkeycloak.service.cmd.ReaderCmdService;
 import com.yaba.springkeycloak.utils.CustomApiResponse;

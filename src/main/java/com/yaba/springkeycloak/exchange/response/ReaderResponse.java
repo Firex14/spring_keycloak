@@ -1,5 +1,6 @@
 package com.yaba.springkeycloak.exchange.response;
 
+import com.yaba.springkeycloak.entities.BookLoan;
 import com.yaba.springkeycloak.enums.ReaderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,4 +22,6 @@ public class ReaderResponse {
     private ReaderStatus status;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
+    private List<BookLoan> borrowedBooks;
+
 }

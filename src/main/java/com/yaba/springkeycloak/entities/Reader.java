@@ -9,6 +9,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Entity
@@ -44,4 +46,14 @@ public class Reader extends BaseModel{
                 .count();
         return activeLoans < maxBorrowLimit;
     }
+
+    public void addBookLoan(BookLoan bookLoan) {
+        if (this.borrowedBooks == null) {
+        this.borrowedBooks = new ArrayList<>();
+        }
+        this.borrowedBooks.add(bookLoan);
+        bookLoan.setReader(this);
+    }
 }
+
+
