@@ -5,8 +5,10 @@ import com.yaba.springkeycloak.exchange.request.reader.ReaderCreationRequest;
 import com.yaba.springkeycloak.exchange.request.reader.ReaderUpdateRequest;
 import com.yaba.springkeycloak.exchange.response.ReaderResponse;
 
+import java.util.UUID;
+
 public interface ReaderCmdService {
     ReaderResponse save(ReaderCreationRequest creationRequest);
     ReaderResponse update(ReaderUpdateRequest updateRequest);
-    ReaderResponse setStatus(ReaderStatus status);
+    ReaderResponse setStatus(UUID id,ReaderStatus status);
 }

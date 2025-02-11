@@ -15,8 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 
 @RestController
@@ -54,19 +57,19 @@ public class ReaderQueryController {
         );
     }
 
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Catégorie récupérer avec succès"),
-//            @ApiResponse(responseCode = "400", description = "Requête invalide"),
-//            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
-//    })
-//    @GetMapping("/{id}")
-//    public ResponseEntity<CustomApiResponse<CategoryResponse>> getOneById(
-//            @Parameter(description = "Id de la catégorie à récupérer.") @PathVariable UUID id) {
-//        CategoryResponse category = queryService.getOne(id);
-//        return ResponseUtils.buildSuccessResponse(
-//                category,
-//                "SUCCESS",
-//                HttpStatus.OK
-//        );
-//    }
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lecteur récupérer avec succès"),
+            @ApiResponse(responseCode = "400", description = "Requête invalide"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomApiResponse<ReaderResponse>> getOneById(
+            @Parameter(description = "Id du lecteur à récupérer.") @PathVariable UUID id) {
+        ReaderResponse response = queryService.getOne(id);
+        return ResponseUtils.buildSuccessResponse(
+                response,
+                "SUCCESS",
+                HttpStatus.OK
+        );
+    }
 }

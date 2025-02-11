@@ -15,6 +15,8 @@ import com.yaba.springkeycloak.service.cmd.ReaderCmdService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class ReaderCmdServiceImpl implements ReaderCmdService {
     private final ReaderRepository repository;
@@ -44,14 +46,61 @@ public class ReaderCmdServiceImpl implements ReaderCmdService {
 
     @Override
     public ReaderResponse update(ReaderUpdateRequest updateRequest) {
-        return null;
+        if (updateRequest.getId() == null) {
+            throw new ApiRequestException(
+                    ExceptionCode.NULL_VALUE_OF_ID.getMessage(),
+                    ExceptionCode.NULL_VALUE_OF_ID.getValue(),
+                    ExceptionLevel.ERROR,
+                    HttpStatus.BAD_REQUEST);
+        }
+        return repository.findById(updateRequest.getId()).map(
+                reader -> {
+                    if (existExceptCurrent(updateRequest.getEmail(), reader.getId())) {
+                        throw new ApiRequestException(
+                                ExceptionCode.READER_ALREADY_EXISTS.getMessage(),
+                                ExceptionCode.READER_ALREADY_EXISTS.getValue(),
+                                ExceptionLevel.ERROR,
+                                HttpStatus.CONFLICT
+                        );
+                    }
+                    reader.setEmail(updateRequest.getEmail());
+                    reader.setFirstName(updateRequest.getFirstName());
+                    reader.setLastName(updateRequest.getLastName());
+                    return mapper.toDto(repository.save(reader));
+                }
+                )
+                .orElseThrow(
+                () -> new ApiRequestException(
+                        ExceptionCode.READER_NOT_FOUND.getMessage(),
+                        ExceptionCode.READER_NOT_FOUND.getValue(),
+                        ExceptionLevel.ERROR,
+                        HttpStatus.NOT_FOUND
+                    )
+            );
     }
 
     @Override
-    public ReaderResponse setStatus(ReaderStatus status) {
-        return null;
+    public ReaderResponse setStatus(UUID id, ReaderStatus status) {
+        return repository.findById(id).map(
+                reader -> {
+                    reader.setStatus(status);
+                    return mapper.toDto(repository.save(reader));
+                }
+        ).orElseThrow(
+                () -> new ApiRequestException(
+                        ExceptionCode.READER_NOT_FOUND.getMessage(),
+                        ExceptionCode.READER_NOT_FOUND.getValue(),
+                        ExceptionLevel.ERROR,
+                        HttpStatus.NOT_FOUND
+                    )
+
+        );
     }
     private boolean existByEmail(String email) {
         return repository.existsByEmail(email);
+    }
+
+    private boolean existExceptCurrent(String email, UUID readerId) {
+        return repository.existsByEmailAndIdNot(email, readerId);
     }
 }
