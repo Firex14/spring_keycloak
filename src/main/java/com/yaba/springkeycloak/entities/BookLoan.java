@@ -39,10 +39,5 @@ public class BookLoan{
     @Enumerated(EnumType.STRING)
     private LoanStatus status;
 
-    @PrePersist
-    public void setReturnedDate() {
-        if (this.borrowedDate != null) {
-            this.returnedDate = this.borrowedDate.plusDays(30);
-        }
-    }
+
 }

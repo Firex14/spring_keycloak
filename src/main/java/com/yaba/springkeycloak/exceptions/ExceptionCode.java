@@ -9,7 +9,9 @@ public enum ExceptionCode {
     CATEGORY_NOT_FOUND(4001, "Cette categorie n'existe pas"),
 
     BOOK_ALREADY_EXISTS(5000, "Ce livre existe déjà"),
-    BOOK_NOT_FOUND(5001, "Ce livre n'existe pas"),
+    BOOK_NOT_FOUND(5001, "Ce livre n'existe pas."),
+    BOOK_ALREADY_BORROWED(5002, "Livre déjà dans la liste des emprunts." ),
+    OUT_OF_STOCK(5003,"Livre en rupture de stock." ),
 
     READER_ALREADY_EXISTS(3000, "Cet adresse email est déjà utilisé"),
     READER_NOT_FOUND(3001, "Ce lecteur n'existe pas."),

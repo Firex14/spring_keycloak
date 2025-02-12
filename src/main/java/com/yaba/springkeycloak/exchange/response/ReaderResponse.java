@@ -22,6 +22,6 @@ public class ReaderResponse {
     private ReaderStatus status;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
-    private List<BookLoan> borrowedBooks;
+    private List<BookLoanResponse> borrowedBooks;
 
 }

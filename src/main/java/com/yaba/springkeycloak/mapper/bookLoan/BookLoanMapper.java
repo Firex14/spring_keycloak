@@ -9,9 +9,7 @@ import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public interface BookLoanMapper extends BaseMapper<BookLoanResponse, BookLoan> {
-    @Mappings({
-            @Mapping(source = "reader.id", target = "readerId"),
-            @Mapping(source = "book.id", target = "bookId")
-    })
+    @Mapping(source = "reader.id", target = "readerId")
+    @Mapping(source = "book.id", target = "bookId")
     BookLoanResponse toDto(BookLoan bookLoan);
 }

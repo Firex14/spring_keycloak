@@ -35,6 +35,23 @@ public class BookLoanCmdServiceImpl implements BookLoanCmdService {
         Reader reader = getReaderIfExists(creationRequest.getReaderId());
         Book book = getBookIfExists(creationRequest.getBookId());
 
+        if (isBorrowed(book,reader)) {
+            throw new ApiRequestException(
+                    ExceptionCode.BOOK_ALREADY_BORROWED.getMessage(),
+                    ExceptionCode.BOOK_ALREADY_BORROWED.getValue(),
+                    ExceptionLevel.ERROR,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (!(book.getStock() > 0)) {
+            throw new ApiRequestException(
+                    ExceptionCode.OUT_OF_STOCK.getMessage(),
+                    ExceptionCode.OUT_OF_STOCK.getValue(),
+                    ExceptionLevel.ERROR,
+                    HttpStatus.FORBIDDEN
+            );
+        }
+
         if (!reader.canBorrowMoreBooks(MAX_BORROW_LIMIT)) {
             throw new ApiRequestException(
                     ExceptionCode.TOO_MANY_BORROWED_BOOKS.getMessage(),
@@ -51,7 +68,14 @@ public class BookLoanCmdServiceImpl implements BookLoanCmdService {
 
         BookLoan savedLoan = repository.save(loan);
         reader.addBookLoan(savedLoan);
+        readerRepository.save(reader);
+        book.setStock(book.getStock() - 1);
+        bookRepository.save(book);
 
+    }
+
+    private boolean isBorrowed(Book book, Reader reader) {
+        return repository.existsByBookAndReaderAndStatus(book, reader, LoanStatus.BORROWED);
     }
 
     @Override
@@ -59,7 +83,9 @@ public class BookLoanCmdServiceImpl implements BookLoanCmdService {
         repository.findById(bookLoanId).map(
                 bookLoan -> {
                     bookLoan.setStatus(LoanStatus.RETURNED);
-
+                    Book book = getBookIfExists(bookLoan.getBook().getId());
+                    book.setStock(book.getStock() + 1);
+                    bookRepository.save(book);
                     return repository.save(bookLoan);
                 }
         ).orElseThrow(
