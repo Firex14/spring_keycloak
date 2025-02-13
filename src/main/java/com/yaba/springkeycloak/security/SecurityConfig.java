@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(h->h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(ar->ar.requestMatchers("/cmd/kc/**", "/query/kc/**").hasAuthority("admin"))
+                .authorizeHttpRequests(ar->ar.requestMatchers("/actuator/prometheus/**").permitAll())
                 .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
                 .oauth2ResourceServer(o2->o2.jwt(jwt->jwt.jwtAuthenticationConverter(jwtConverter)))
                 .build();

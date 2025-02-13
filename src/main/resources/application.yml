@@ -38,3 +38,17 @@ application:
     client-secret: ${KEYCLOAK_CLIENT_SECRET}
     realm: ${KEYCLOAK_REALM}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoint:
+    health:
+      show-details: always
+logging:
+  file:
+    path: /var/log/spring-boot/
