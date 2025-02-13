@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(CategoryCmdController.CATEGORY_CMD_ROUTE)
 public class CategoryCmdController {
     public static final String CATEGORY_CMD_ROUTE = "/cmd/categories";
+    private static final Logger log = LoggerFactory.getLogger(CategoryCmdController.class);
+
 
     private final CategoryCmdService cmdService;
 
@@ -37,6 +41,7 @@ public class CategoryCmdController {
     @PostMapping
     public ResponseEntity<CustomApiResponse<CategoryResponse>> create(
             @Parameter(description = "Détails de la catégorie à créer") @RequestBody CategoryCreationRequest request) {
+        log.info("*************** Request to save Category ***************");
         CategoryResponse result = cmdService.save(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
@@ -54,6 +59,7 @@ public class CategoryCmdController {
     @PutMapping
     public ResponseEntity<CustomApiResponse<CategoryResponse>> update(
             @Parameter(description = "Détails de la catégorie à mettre à jour") @RequestBody CategoryUpdateRequest request) {
+        log.info("**************** Request to update Category ************");
         CategoryResponse result = cmdService.update(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }

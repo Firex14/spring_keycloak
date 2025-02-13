@@ -46,10 +46,8 @@ public class ReaderQueryController {
     @GetMapping
     public ResponseEntity<CustomApiResponse<Page<ReaderResponse>>> getAll(
             @Parameter(description = "Détails de la pagination (page, taille, etc.)") Pageable pageable) {
-        log.info("Request to get All Readers");
-
+        log.info("*********** Request to get All Readers ************");
         Page<ReaderResponse> readers = queryService.getAll(pageable);
-
         return ResponseUtils.buildSuccessResponse(
                 readers,
                 "SUCCESS",
@@ -65,6 +63,7 @@ public class ReaderQueryController {
     @GetMapping("/{id}")
     public ResponseEntity<CustomApiResponse<ReaderResponse>> getOneById(
             @Parameter(description = "Id du lecteur à récupérer.") @PathVariable UUID id) {
+        log.info("*********** Request to get a Reader by Id ************");
         ReaderResponse response = queryService.getOne(id);
         return ResponseUtils.buildSuccessResponse(
                 response,

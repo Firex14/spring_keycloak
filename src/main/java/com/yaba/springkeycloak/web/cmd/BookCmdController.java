@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class BookCmdController {
 
     public static final String BOOK_CMD_ROUTE = "/cmd/books";
+    private static final Logger log = LoggerFactory.getLogger(BookCmdController.class);
     private final BookCmdService cmdService;
 
     public BookCmdController(BookCmdService cmdService) {
@@ -37,6 +40,7 @@ public class BookCmdController {
     @PostMapping
     public ResponseEntity<CustomApiResponse<BookResponse>> create(
             @Parameter(description = "Détails du livre à sauvegarder") @RequestBody BookCreationRequest request) {
+        log.info("********* Request to save a new book *********");
         BookResponse result = cmdService.save(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
@@ -54,6 +58,7 @@ public class BookCmdController {
     @PutMapping
     public ResponseEntity<CustomApiResponse<BookResponse>> update(
             @Parameter(description = "Détails du livre à mettre à jour") @RequestBody BookUpdateRequest request) {
+        log.info("********* Request to update book *********");
         BookResponse result = cmdService.update(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }

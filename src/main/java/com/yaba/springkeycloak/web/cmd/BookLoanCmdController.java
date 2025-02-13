@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.UUID;
 @RequestMapping(BookLoanCmdController.LOAN_CMD_ROUTE)
 public class BookLoanCmdController {
     public static final String LOAN_CMD_ROUTE = "/cmd/loans";
+    private static final Logger log = LoggerFactory.getLogger(BookLoanCmdController.class);
 
     private final BookLoanCmdService cmdService;
 
@@ -37,7 +40,8 @@ public class BookLoanCmdController {
     @PostMapping
     public ResponseEntity<CustomApiResponse<Void>> create(
             @Parameter(description = "Détails du Prêt à sauvegarder") @RequestBody BookLoanCreationRequest request) {
-         cmdService.loanBook(request);
+        log.info("********** Request to save a loan **********");
+        cmdService.loanBook(request);
         return ResponseUtils.buildVoidResponse("Prêt effectué avec succès.",HttpStatus.OK);
     }
 
@@ -54,6 +58,7 @@ public class BookLoanCmdController {
     @PutMapping(path = "/{loanId}")
     public ResponseEntity<CustomApiResponse<Void>> update(
             @Parameter(description = "Détails du prêt à rendre") @PathVariable UUID loanId) {
+        log.info("********** Request to return a loan **********");
         cmdService.returnBook(loanId);
         return ResponseUtils.buildVoidResponse("Prêt rendu avec succès.",HttpStatus.OK);
     }

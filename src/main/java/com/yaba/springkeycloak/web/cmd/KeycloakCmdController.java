@@ -60,6 +60,7 @@ public class KeycloakCmdController {
     @PutMapping
     public ResponseEntity<CustomApiResponse<UserRepresentation>> update(
             @Parameter(description = "Détails de l'utilisateur à mettre à jour") @RequestBody UserUpdateRequest request) {
+        log.info("********* Request to update user *********");
         UserRepresentation result = cmdService.updateUser(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }

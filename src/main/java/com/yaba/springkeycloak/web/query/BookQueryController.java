@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @RequestMapping(BookQueryController.BOOK_QUERY_ROUTE)
 public class BookQueryController {
     public static final String BOOK_QUERY_ROUTE = "/query/books";
+    private static final Logger log = LoggerFactory.getLogger(BookQueryController.class);
 
     private final BookQueryService queryService;
 
@@ -42,6 +45,7 @@ public class BookQueryController {
     @GetMapping
     public ResponseEntity<CustomApiResponse<Page<BookResponse>>> getAll(
             @Parameter(description = "Détails de la pagination (page, taille, etc.)") Pageable pageable) {
+        log.info("********** Request to get all books **********");
         Page<BookResponse> books = queryService.getAll(pageable);
         return ResponseUtils.buildSuccessResponse(
                 books,
@@ -51,13 +55,14 @@ public class BookQueryController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Livre récupérer avec succès"),
+            @ApiResponse(responseCode = "200", description = "Livre récupéré avec succès"),
             @ApiResponse(responseCode = "400", description = "Requête invalide"),
             @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @GetMapping("/{id}")
     public ResponseEntity<CustomApiResponse<BookResponse>> getOneById(
             @Parameter(description = "Id du livre à récupérer.") @PathVariable UUID id) {
+        log.info("********** Request to get a book by Id **********");
         BookResponse book = queryService.getOne(id);
         return ResponseUtils.buildSuccessResponse(
                 book,

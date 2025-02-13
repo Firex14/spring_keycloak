@@ -43,6 +43,7 @@ public class ReaderCmdController {
     @PostMapping
     public ResponseEntity<CustomApiResponse<ReaderResponse>> create(
             @Parameter(description = "Détails du lecteur à sauvegarder") @RequestBody ReaderCreationRequest request) {
+        log.info("********** Request to save a reader **********");
         ReaderResponse result = cmdService.save(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
@@ -60,6 +61,7 @@ public class ReaderCmdController {
     @PutMapping
     public ResponseEntity<CustomApiResponse<ReaderResponse>> update(
             @Parameter(description = "Détails du lecteur à mettre à jour") @RequestBody ReaderUpdateRequest request) {
+        log.info("********** Request to update a reader **********");
         ReaderResponse result = cmdService.update(request);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }
@@ -77,6 +79,7 @@ public class ReaderCmdController {
     @PatchMapping(path = "/{id}")
     public ResponseEntity<CustomApiResponse<ReaderResponse>> setStatus(
             @Parameter(description = "Détails du lecteur à mettre à jour") @PathVariable UUID id, @RequestBody ReaderStatus status) {
+        log.info("********** Request to set a reader status **********");
         ReaderResponse result = cmdService.setStatus(id, status);
         return ResponseUtils.buildSuccessResponse(result, "SUCCESS", HttpStatus.OK);
     }

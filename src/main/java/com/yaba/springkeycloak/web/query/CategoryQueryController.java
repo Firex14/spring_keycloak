@@ -46,9 +46,8 @@ public class CategoryQueryController {
     @GetMapping
     public ResponseEntity<CustomApiResponse<Page<CategoryResponse>>> getAll(
             @Parameter(description = "Détails de la pagination (page, taille, etc.)") Pageable pageable) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Authentication: {}", authentication);
         Page<CategoryResponse> categories = queryService.getAll(pageable);
+        log.info("********** Request to get all categories **********");
 
         return ResponseUtils.buildSuccessResponse(
                 categories,
@@ -65,6 +64,7 @@ public class CategoryQueryController {
     @GetMapping("/{id}")
     public ResponseEntity<CustomApiResponse<CategoryResponse>> getOneById(
             @Parameter(description = "Id de la catégorie à récupérer.") @PathVariable UUID id) {
+        log.info("********** Request to get a category by Id **********");
         CategoryResponse category = queryService.getOne(id);
         return ResponseUtils.buildSuccessResponse(
                 category,
